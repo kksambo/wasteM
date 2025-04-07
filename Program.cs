@@ -1,11 +1,17 @@
-
 using Microsoft.EntityFrameworkCore;
 using WasteManagement.Models;
 using System.Security.Cryptography;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    ApplicationName = typeof(Program).Assembly.FullName,
+    ContentRootPath = AppContext.BaseDirectory,
+    WebRootPath = "wwwroot",
+    // Removed Urls property as it is not valid for WebApplicationOptions
+});
 
 builder.Services.AddDbContext<WasteManagementContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -24,6 +30,8 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
                       });
 });
+
+builder.WebHost.UseUrls($"http://*:{port}"); // Configure the URLs
 
 var app = builder.Build();
 
