@@ -35,6 +35,12 @@ builder.WebHost.UseUrls($"http://*:{port}"); // Configure the URLs
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<WasteManagementContext>();
+    dbContext.Database.Migrate(); // Apply pending migrations
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
