@@ -51,7 +51,7 @@ app.UseHttpsRedirection();
 // Enable CORS
 app.UseCors(corsPolicy);
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello ledwaba!");
 
 app.MapPost("/api/smartbins", async (WasteManagementContext db, SmartBin smartBin) =>
 {
