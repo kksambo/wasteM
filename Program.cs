@@ -77,6 +77,26 @@ app.MapGet("/api/AppUsers", async (WasteManagementContext db) =>
     return await db.AppUsers.ToListAsync();
 });
 
+app.MapDelete("/api/deleteUser/{id}", async (int id, WasteManagementContext db) =>
+{
+    // Find the user by ID
+    var appUser = await db.AppUsers.FindAsync(id);
+    
+    // If the user is not found, return a 404 (Not Found) response
+    if (appUser == null)
+    {
+        return Results.NotFound();
+    }
+
+    // Remove the user from the database
+    db.AppUsers.Remove(appUser);
+    await db.SaveChangesAsync();
+
+    // Return a 204 (No Content) response as confirmation
+    return Results.NoContent();
+});
+
+
 app.MapPost("/api/Rewards", async (WasteManagementContext db, Reward reward) =>
 {
     var user = await db.AppUsers.FirstOrDefaultAsync(u => u.Email == reward.UserEmail);
