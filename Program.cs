@@ -109,7 +109,7 @@ app.MapDelete("/api/deleteBin/{id}", async (int id, WasteManagementContext db) =
     }
 
     // Remove the user from the database
-    db.AppUsers.Remove(bin);
+    db.SmartBins.Remove(bin);
     await db.SaveChangesAsync();
 
     // Return a 204 (No Content) response as confirmation
