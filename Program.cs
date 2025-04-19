@@ -65,6 +65,26 @@ app.MapGet("/api/smartbins", async (WasteManagementContext db) =>
     return await db.SmartBins.ToListAsync();
 });
 
+app.MapPut("/api/smartbins/{id}", async (WasteManagementContext db, int id, SmartBin updatedBin) =>
+{
+    var bin = await db.SmartBins.FindAsync(id);
+    if (bin == null)
+    {
+        return Results.NotFound($"Bin with ID {id} not found.");
+    }
+
+    // Update the bin's capacity and current weight
+    bin.Capacity = updatedBin.Capacity;
+    bin.CurrentWeight = updatedBin.CurrentWeight;  // Update current weight
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok(bin);  // Respond with the updated bin
+});
+
+
+
+
 app.MapPost("/api/AppUsers", async (WasteManagementContext db, AppUser appUser) =>
 {
     db.AppUsers.Add(appUser);
